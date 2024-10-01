@@ -23,3 +23,6 @@ Route::get('/fooditem/{id}', [DashboardController::class, 'showFoodItem'])->name
 
 
 //admin access
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register')->middleware([AdminMiddleware::class]);
+Route::post('/register', [AuthController::class, 'register'])->name('register.post')->middleware([AdminMiddleware::class]);
+

@@ -27,6 +27,9 @@
                     @endif
                 </div>
             @elseif(Auth::user()->is_admin == true)
+                <a href="/register" class="block w-fit px-4 py-4 border-[0.1px] border-black mb-4 cursor-pointer">
+                    Register a new user
+                </a>
                 <div class="h-full w-full flex flex-row">
                     <div class="w-1/2 flex flex-col bg-stone-100">
                         <h2 class="pl-4 pt-4">User List</h2>
