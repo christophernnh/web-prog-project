@@ -43,14 +43,12 @@ class DashboardController extends Controller
     // DashboardController.php
     public function showUserFoodItems($id)
     {
-        $user = User::findOrFail($id);
         $fooditems = FoodItem::where('user_id', $id)->get();
-        $users = User::where('is_admin', false)->get();
+        $clickeduser = User::findOrFail($id);
+        $users = User::all();
 
-        return view('dashboard', compact('user', 'fooditems', 'users'));
+        return view('dashboard', compact('clickeduser', 'fooditems', 'users'));
     }
-
-
 
 
     /**

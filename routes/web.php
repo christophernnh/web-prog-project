@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddItemController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FoodStatusController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\UserMiddleware;
@@ -25,4 +26,6 @@ Route::get('/fooditem/{id}', [DashboardController::class, 'showFoodItem'])->name
 //admin access
 Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register')->middleware([AdminMiddleware::class]);
 Route::post('/register', [AuthController::class, 'register'])->name('register.post')->middleware([AdminMiddleware::class]);
+Route::get('/fooditem/{id}/edit', [FoodStatusController::class, 'showFoodItem'])->name('fooditem.edit')->middleware([AdminMiddleware::class]);
+Route::put('/fooditem/{id}', [FoodStatusController::class, 'updateFoodItem'])->name('fooditem.update')->middleware([AdminMiddleware::class]);
 

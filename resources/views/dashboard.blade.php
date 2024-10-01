@@ -49,19 +49,20 @@
                     </div>
 
                     <div class="w-1/2 bg-stone-200">
-                        @isset($fooditems)
-                            <h2 class="pl-4 pt-4">Donated Food List for: {{ $user->username }}</h2>
+                        @isset($clickeduser)
+                            <h2 class="pl-4 pt-4">Donated Food List for: {{ $clickeduser->username }}</h2>
                             @if ($fooditems->isEmpty())
                                 <div class="pl-4">No food items for this user.</div>
                             @else
                                 @foreach ($fooditems as $fooditem)
                                     <div class="border-[0.1px] border-black p-4">
-                                        <a href="{{ route('fooditem.details', ['id' => $fooditem->id]) }}" class="block">
+                                        <a href="{{ route('fooditem.edit', ['id' => $fooditem->id]) }}" class="block">
                                             <h2 class="text-lg font-bold">{{ $fooditem->name }}</h2>
                                             <p><strong>Amount:</strong> {{ $fooditem->amount }}</p>
-                                            <p><strong>Type:</strong> {{ $fooditem->itemType->name ?? 'N/A' }}</p>
                                             <p><strong>Status:</strong> {{ $fooditem->statusType->name }}</p>
+                                            <p>Click to edit</p>
                                         </a>
+
                                     </div>
                                 @endforeach
                             @endif
