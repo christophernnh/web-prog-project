@@ -5,18 +5,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @vite('resources/css/app.css')
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 
 <body>
     <div id="app">
-        <nav class="absolute w-full bg-stone-300 px-10 py-10 flex flex-row justify-between">
-            Waste Not
+        <nav class="absolute w-full h-24 bg-white border-b-[1px] px-10 md:px-16 py-6 flex flex-row justify-between font-afacad">
+            <a href="/dashboard" class="w-50% text-[24px]">WasteNot</a>
+
+
             @auth
-                <div>
-                    <h1 class="">
+                <div class="w-1/2 flex flex-col items-end justify-center text-[20px]">
+                    <div class="text-nowrap text-black">
                         Welcome back, {{ Auth::user()->username }}
-                    </h1>
-                    <h1 class="font-bold underline">
+                    </div>
+                    <h1 class="text-cyan font-bold underline hover:text-cyanHover transition-colors ease-in duration-[500]">
                         <a class="nav-link" href="{{ route('logout') }}"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
                     </h1>
@@ -30,7 +34,7 @@
             @endauth
         </nav>
 
-        <main>
+        <main class="bg-lightBlue pt-32 px-10 md:px-16 min-h-screen font-afacad pb-20 scroll-smooth">
             @yield('content')
         </main>
     </div>

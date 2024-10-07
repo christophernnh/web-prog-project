@@ -8,8 +8,8 @@
 </head>
 
 <body>
-    <div class="w-full h-[100dvh] bg-stone-400 flex items-center justify-center">
-        <div class="flex flex-col py-4 px-4 bg-white w-80">
+    <div class="w-full h-[100dvh] bg-lightBlue flex items-center justify-center">
+        <div class="flex flex-col py-8 px-6 bg-white w-80 md:w-[350px] h-auto rounded-xl shadow-xl">
             <!-- Title -->
             <h1 class="text-2xl font-bold mb-4">Sign In</h1>
 
@@ -32,16 +32,16 @@
             @endif
 
             <!-- Login Form -->
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('login') }}" class="">
                 @csrf
                 <label for="email" class="block mb-2 text-sm font-medium">Email</label>
                 <input type="email" name="email" value="{{ old('email') }}"
-                    class="mb-2 px-2 py-2 w-full border-[0.5px] border-black outline-none"
+                    class="mb-2 px-3 py-2 w-full  rounded-lg shadow-md outline-none"
                     placeholder="Enter your email" required>
 
                 <label for="password" class="block mb-2 text-sm font-medium">Password</label>
                 <input type="password" name="password"
-                    class="mb-4 px-2 py-2 w-full border-[0.5px] border-black outline-none"
+                    class="mb-4 px-3 py-2 w-full  rounded-lg shadow-md outline-none"
                     placeholder="Enter your password" required>
 
                 <div class="flex items-center mb-4">

@@ -28,4 +28,4 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register'])->name('register.post')->middleware([AdminMiddleware::class]);
 Route::get('/fooditem/{id}/edit', [FoodStatusController::class, 'showFoodItem'])->name('fooditem.edit')->middleware([AdminMiddleware::class]);
 Route::put('/fooditem/{id}', [FoodStatusController::class, 'updateFoodItem'])->name('fooditem.update')->middleware([AdminMiddleware::class]);
-
+Route::get('/dashboard/search', [DashboardController::class, 'searchUser'])->name('dashboard.search');

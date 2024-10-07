@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPUnit\Framework\isEmpty;
+
 class DashboardController extends Controller
 {
     /**
@@ -40,6 +42,20 @@ class DashboardController extends Controller
         return view('dashboard', compact('fooditems', 'users'));
     }
 
+    public function searchUser(Request $request)
+    {
+        $name = $request->input('username', ''); // Default to an empty string if no name is provided
+
+        // Perform the search based on the query
+        if($name== ""){
+            $searchedUsers = User::all();
+        }else{
+            $searchedUsers = User::where('username', 'LIKE', '%' . $name . '%')->get();
+        }
+
+
+        return view('dashboard', compact('searchedUsers'));
+    }
     // DashboardController.php
     public function showUserFoodItems($id)
     {
