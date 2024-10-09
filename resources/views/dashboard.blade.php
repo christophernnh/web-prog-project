@@ -7,30 +7,117 @@
                 <a href="/additem" class="font-medium text-[18px] h-12 w-fit px-4 flex items-center  mb-4 cursor-pointer rounded-md  bg-cyan hover:bg-cyanHover transition-colors ease-in duration-[500] shadow-md text-white">
                     Register food item
                 </a>
+    
+                <!-- @php
+                    $currentUserId = auth()->id(); // Assuming you're using Laravel's authentication
+                    
+                    // Filter food items for the current user
+                    $userFoodItems = $fooditems->where('user_id', $currentUserId);
+                    
+                    // Group food items by type and sum their amounts
+                    $foodTypeAmounts = $userFoodItems->groupBy('itemType.name')
+                        ->map(function ($items) {
+                            return $items->sum('amount');
+                        });
+                    
+                    // Calculate total amount of all food items
+                    $totalAmount = $foodTypeAmounts->sum();
+                    
+                    // Calculate percentages for each food type
+                    $foodTypePercentages = $foodTypeAmounts->map(function ($amount) use ($totalAmount) {
+                        return $totalAmount > 0 ? ($amount / $totalAmount) * 100 : 0;
+                    });
+                @endphp -->
+                @php
+                        $currentUserId = auth()->id();
+                        $userFoodItems = $fooditems->where('user_id', $currentUserId);
+                        $foodTypeAmounts = $userFoodItems->groupBy('itemType.name')
+                            ->map(function ($items) {
+                                return $items->sum('amount');
+                            });
+                        $totalAmount = $foodTypeAmounts->sum();
+                        $foodTypePercentages = $foodTypeAmounts->map(function ($amount) use ($totalAmount) {
+                            return $totalAmount > 0 ? ($amount / $totalAmount) * 100 : 0;
+                        });
+                        $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
+                    @endphp 
 
-                <h1 class="text-[20px] font-bold mb-4">Donated Food List</h1>
-                <div class="h-full w-full flex flex-col">
-                    @if ($fooditems->isEmpty())
-                        <p>No food items available.</p>
-                    @else
-                        @foreach ($fooditems as $fooditem)
-                            <div class="border rounded-lg shadow-lg p-4 mb-4 bg-white">
+                <div class="container mx-auto px-4">
+                    <h1 class="text-2xl font-bold mb-4">Your Donated Food Percentage List</h1>
+                    
+                    <div class="rounded-lg mb-4">
+                        @if($foodTypePercentages->isEmpty())
+                            <p class="text-gray-600">You haven't made any donations yet.</p>
+                        @else
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                @foreach($foodTypePercentages as $type => $percentage)
+                                    <div class="bg-white p-3 rounded-lg shadow">
+                                        <h3 class="font-bold">{{ $type }}</h3>
+                                        <div class="flex items-center">
+                                            <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
+                                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $percentage }}%"></div>
+                                            </div>
+                                            <span class="text-sm font-medium">{{ number_format($percentage, 1) }}%</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mt-1">Amount: {{ $foodTypeAmounts[$type] }}</p>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                    
+
+                    <div class="container mx-auto">
+                        <h1 class="text-2xl font-bold mb-4">Your Donated Food Percentage Chart</h1>
+                        
+                        <div class="py-5 bg-white rounded-lg shadow mb-4">
+                            @if($foodTypePercentages->isEmpty())
+                                <p class="text-gray-600">You haven't made any donations yet.</p>
+                            @else
+                                <div class="flex flex-wrap items-center">
+                                    <div class="w-full md:w-1/2 mb-4 md:mb-0">
+                                        <div class="w-64 h-64 mx-auto">
+                                            @include('php-blade-pie-chart', ['foodTypePercentages' => $foodTypePercentages])
+                                        </div>
+                                    </div>
+                                    <div class="w-full md:w-1/2">
+                                        <ul class="space-y-2">
+                                            @foreach($foodTypePercentages as $type => $percentage)
+                                                <li class="flex items-center">
+                                                    <span class="w-4 h-4 mr-2 inline-block" style="background-color: {{ $colors[$loop->index % count($colors)] }}"></span>
+                                                    <span class="font-medium">{{ $type }}:</span>
+                                                    <span class="ml-2">{{ number_format($percentage, 1) }}% ({{ $foodTypeAmounts[$type] }})</span>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                    <h2 class="text-2xl font-bold mb-4">Donated Food List Details</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @forelse ($fooditems as $fooditem)
+                            <div class="border rounded-lg shadow-lg p-4 bg-white">
                                 <h2 class="text-lg font-bold">{{ $fooditem->name }}</h2>
                                 <p><strong>Amount:</strong> {{ $fooditem->amount }}</p>
                                 <p><strong>Description:</strong> {{ $fooditem->description }}</p>
                                 <p><strong>Type:</strong> {{ $fooditem->itemType->name ?? 'N/A' }}</p>
                                 <p><strong>Status:</strong> {{ $fooditem->statusType->name }}</p>
                                 <p><strong>Registered By:</strong> {{ $fooditem->user->username }}</p>
-                                <p><strong>Registered at:</strong> {{ $fooditem->created_at }}</p>
+                                <p><strong>Registered at:</strong> {{ $fooditem->created_at->format('Y-m-d H:i:s') }}</p>
                             </div>
-                        @endforeach
-                    @endif
+                        @empty
+                            <p class="col-span-full text-center text-gray-500">No food items available.</p>
+                        @endforelse
+                    </div>
+                </div>
                 </div>
             @elseif(Auth::user()->is_admin == true)
-                <a href="/register" class=" font-medium text-[18px] h-12 w-fit px-4 flex items-center  mb-4 cursor-pointer rounded-md  bg-cyan hover:bg-cyanHover transition-colors ease-in duration-[500] shadow-md text-white">
+                <a href="/register" class="  font-medium text-[18px] h-12 w-fit px-4 flex items-center  mb-4 cursor-pointer rounded-md  bg-cyan hover:bg-cyanHover transition-colors ease-in duration-[500] shadow-md text-white">
                     Register User
                 </a>
-                <div class="w-full flex flex-col md:flex-row gap-y-8 md:gap-y-0 md:gap-x-8 ">
+                <div class=" pt-3 w-full flex flex-col md:flex-row gap-y-8 md:gap-y-0 md:gap-x-8 ">
                     <div class="pb-8 min-h-[270px] w-full md:w-1/2 flex flex-col bg-white shadow-md rounded-2xl px-6">
                         <div class="w-full h-[65px] border-b-[1px] border-black  py-[12px] flex flex-row justify-between items-center">
                             <div class="text-[20px] font-bold">User List</div>

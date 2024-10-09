@@ -11,7 +11,10 @@
     <div class="w-full h-[100dvh] bg-lightBlue flex items-center justify-center">
         <div class="flex flex-col py-8 px-6 bg-white w-80 md:w-[350px] h-auto rounded-xl shadow-xl">
             <!-- Title -->
-            <h1 class="text-2xl font-bold mb-4">Sign In</h1>
+            <div class="flex justify-center pb-5 pt-1"><img src="images/wastenot_logo.png" alt="" class="w-48 h-auto">
+        </div>
+            <h1 class="text-2xl font-bold mb-4 text-center">Sign In</h1>
+            
 
             <!-- Check for Session Error Message -->
             @if (session('error'))

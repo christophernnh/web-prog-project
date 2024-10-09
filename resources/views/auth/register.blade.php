@@ -3,6 +3,7 @@
 @section('content')
     <div class="h-full w-full flex justify-center items-center">
         <div class=" min-h-[400px] w-[90%] xl:w-[35%] flex flex-col justify-content-start items-center bg-whiteDarker shadow-lg rounded-xl pb-12 pt-8 px-10 md:px-20">
+            <div class=""><img src="images/wastenot_logo.png" alt="" class="w-48 h-auto py-2 pb-6"></div>
             <div class=" text-center text-[24px] mb-8 font-bold">{{ __('Register') }} a user</div>
 
             <div class="w-full h-full flex flex-col justify-start items-center">

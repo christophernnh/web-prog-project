@@ -12,8 +12,10 @@
 <body>
     <div id="app">
         <nav class="absolute w-full h-24 bg-white border-b-[1px] px-10 md:px-16 py-6 flex flex-row justify-between font-afacad">
-            <a href="/dashboard" class="w-50% text-[24px]">WasteNot</a>
-
+            <!-- <a href="/dashboard" class="w-50% text-[24px]">WasteNot</a> -->
+            <div class="h-full flex items-center">
+                <img src="images/wastenot_logo.png" alt="Logo" class="h-full max-h-16 object-contain">
+            </div>
 
             @auth
                 <div class="w-1/2 flex flex-col items-end justify-center text-[20px]">
