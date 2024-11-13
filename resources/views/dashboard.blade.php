@@ -137,22 +137,21 @@
                         <div class="pt-4 flex flex-col items-center justify-start gap-y-2">
                             @if (request('username'))
                                 @if ($searchedUsers->isEmpty())
-                                    <div>No users found.</div>
+                                <div>No users found.</div>
                                 @else
                                     @foreach ($searchedUsers as $user)
                                         @if (!$user->is_admin)
                                             <a href="{{ route('user.fooditems', ['id' => $user->id]) }}"
-                                            class="cursor-pointer w-full md:h-[70px] rounded-xl border-[0.1px] border-black bg-whiteDarker px-4 py-2 hover:shadow-md">
+                                                class="cursor-pointer w-full md:h-[70px] rounded-xl border-[0.1px] border-black bg-whiteDarker px-4 py-2 hover:shadow-md">
                                                 <div class="relative flex flex-row justify-between items-center w-full h-full">
                                                     <div class="">
                                                         <h2 class="text-lg font-medium ">{{ $user->username }}</h2>
                                                         <p class="text-md font-normal">{{ $user->email }}</p>
                                                     </div>
                                                     <span class="material-symbols-outlined h-[20px]">
-                                                    arrow_forward_ios
+                                                        arrow_forward_ios
                                                     </span>
                                                 </div>
-
                                             </a>
                                         @endif
                                     @endforeach
