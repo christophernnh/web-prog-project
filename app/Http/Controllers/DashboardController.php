@@ -37,8 +37,9 @@ class DashboardController extends Controller
      */
     public function show()
     {
-        $fooditems = FoodItem::all();
+        $fooditems = FoodItem::orderBy('created_at', 'desc')->get();
         $users = User::all();
+        
         return view('dashboard', compact('fooditems', 'users'));
     }
 
@@ -54,7 +55,7 @@ class DashboardController extends Controller
     // DashboardController.php
     public function showUserFoodItems($id)
     {
-        $fooditems = FoodItem::where('user_id', $id)->get();
+        $fooditems = FoodItem::orderBy('created_at', 'desc')->get();
         $clickeduser = User::findOrFail($id);
         $users = User::all();
 

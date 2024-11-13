@@ -7,27 +7,6 @@
                 <a href="/additem" class="font-medium text-[18px] h-12 w-fit px-4 flex items-center  mb-4 cursor-pointer rounded-md  bg-cyan hover:bg-cyanHover transition-colors ease-in duration-[500] shadow-md text-white">
                     Register food item
                 </a>
-    
-                <!-- @php
-                    $currentUserId = auth()->id(); // Assuming you're using Laravel's authentication
-                    
-                    // Filter food items for the current user
-                    $userFoodItems = $fooditems->where('user_id', $currentUserId);
-                    
-                    // Group food items by type and sum their amounts
-                    $foodTypeAmounts = $userFoodItems->groupBy('itemType.name')
-                        ->map(function ($items) {
-                            return $items->sum('amount');
-                        });
-                    
-                    // Calculate total amount of all food items
-                    $totalAmount = $foodTypeAmounts->sum();
-                    
-                    // Calculate percentages for each food type
-                    $foodTypePercentages = $foodTypeAmounts->map(function ($amount) use ($totalAmount) {
-                        return $totalAmount > 0 ? ($amount / $totalAmount) * 100 : 0;
-                    });
-                @endphp -->
                 @php
                         $currentUserId = auth()->id();
                         $userFoodItems = $fooditems->where('user_id', $currentUserId);
@@ -111,6 +90,7 @@
                             <p class="col-span-full text-center text-gray-500">No food items available.</p>
                         @endforelse
                     </div>
+                    
                 </div>
                 </div>
             @elseif(Auth::user()->is_admin == true)
