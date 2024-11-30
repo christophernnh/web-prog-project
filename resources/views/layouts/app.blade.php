@@ -38,6 +38,7 @@
 
         <main class="bg-lightBlue pt-32 px-10 md:px-16 min-h-screen font-afacad pb-20 scroll-smooth">
             @yield('content')
+            @yield('scripts')
         </main>
     </div>
 </body>

@@ -39,7 +39,7 @@ class DashboardController extends Controller
     {
         $fooditems = FoodItem::orderBy('created_at', 'desc')->get();
         $users = User::all();
-        
+
         return view('dashboard', compact('fooditems', 'users'));
     }
 
@@ -48,8 +48,8 @@ class DashboardController extends Controller
     {
         $name = $request->input('username', '');
         $searchedUsers = User::where('username', 'LIKE', '%' . $name . '%')->get();
-        
-        
+
+
         return view('dashboard', ['users' => $searchedUsers, 'searchedUsers' => $searchedUsers]);
     }
     // DashboardController.php

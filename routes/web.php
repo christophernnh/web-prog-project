@@ -4,6 +4,7 @@ use App\Http\Controllers\AddItemController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FoodStatusController;
+use App\Http\Controllers\PickUpController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\UserMiddleware;
@@ -29,3 +30,15 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 Route::get('/fooditem/{id}/edit', [FoodStatusController::class, 'showFoodItem'])->name('fooditem.edit')->middleware([AdminMiddleware::class]);
 Route::put('/fooditem/{id}', [FoodStatusController::class, 'updateFoodItem'])->name('fooditem.update')->middleware([AdminMiddleware::class]);
 Route::get('/dashboard/search', [DashboardController::class, 'searchUser'])->name('dashboard.search');
+
+
+// User notifies for pickup
+Route::post('/notify-pickup', [PickUpController::class, 'notifyPickup'])->name('notify.pickup');
+
+// Admin views pickups
+Route::get('/pickups', [PickUpController::class, 'viewPickups'])->name('admin.pickups')->middleware([AdminMiddleware::class]);
+
+// Admin confirms pickup
+Route::post('/confirm-pickup', [PickUpController::class, 'confirmPickup'])->name('admin.confirm.pickup');
+
+
