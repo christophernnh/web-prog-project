@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPUnit\Framework\isEmpty;
+
 class DashboardController extends Controller
 {
     /**
@@ -35,15 +37,25 @@ class DashboardController extends Controller
      */
     public function show()
     {
-        $fooditems = FoodItem::all();
+        $fooditems = FoodItem::orderBy('created_at', 'desc')->get();
         $users = User::all();
+
         return view('dashboard', compact('fooditems', 'users'));
     }
 
+
+    public function searchUser(Request $request)
+    {
+        $name = $request->input('username', '');
+        $searchedUsers = User::where('username', 'LIKE', '%' . $name . '%')->get();
+
+
+        return view('dashboard', ['users' => $searchedUsers, 'searchedUsers' => $searchedUsers]);
+    }
     // DashboardController.php
     public function showUserFoodItems($id)
     {
-        $fooditems = FoodItem::where('user_id', $id)->get();
+        $fooditems = FoodItem::orderBy('created_at', 'desc')->get();
         $clickeduser = User::findOrFail($id);
         $users = User::all();
 

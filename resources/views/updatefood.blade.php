@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="mx-10 pt-48">
+    <div>
         <h1 class="text-2xl font-bold">Update Food Item</h1>
 
         <form action="{{ route('fooditem.update', $fooditem->id) }}" method="POST">
@@ -34,7 +34,7 @@
                 </select>
             </div>
 
-            <div class="my-4">
+            <div class="mt-8">
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2">Update Status</button>
             </div>
         </form>
