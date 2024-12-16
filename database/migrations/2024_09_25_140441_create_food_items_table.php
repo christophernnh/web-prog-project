@@ -15,17 +15,21 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->unsignedBigInteger('item_type_id');
-            $table->foreign('item_type_id')->references('id')->on('food_item_types');
+            $table->foreign('item_type_id')->references('id')->on('food_item_types')->onDelete('cascade');
 
             $table->unsignedBigInteger('status_type_id');
-            $table->foreign('status_type_id')->references('id')->on('status_types');
+            $table->foreign('status_type_id')->references('id')->on('status_types')->onDelete('cascade');
+
             $table->string('name');
             $table->float('amount');
-
             $table->string('description');
+
+            $table->timestamp('donated_at')->nullable();
+            $table->string('donation_location')->nullable();
+
             $table->timestamps();
         });
     }
