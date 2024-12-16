@@ -27,6 +27,8 @@ return new class extends Migration
             $table->float('amount');
             $table->string('description');
 
+            $table->string('courier_name')->nullable();
+
             $table->timestamp('donated_at')->nullable();
             $table->string('donation_location')->nullable();
 
