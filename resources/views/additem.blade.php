@@ -72,7 +72,7 @@
 
                     {{-- Submit Button --}}
                     <div class="mb-4 mt-8">
-                        <button href="/dashboard "type="submit" class="shadow-md bg-blue-500 hover:bg-blue-700 bg-cyan text-white font-medium text-[18px] py-2 px-4 rounded w-32">
+                        <button href="/dashboard "type="submit" class="shadow-md hover:bg-blue-700 bg-cyan text-white font-medium text-[18px] py-2 px-4 rounded w-32">
                             Add Item
                         </button>
                     </div>

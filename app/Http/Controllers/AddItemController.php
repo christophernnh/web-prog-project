@@ -36,6 +36,6 @@ class AddItemController extends Controller
         $fooditem->amount = $req->amount;
         $fooditem->save();
 
-        return redirect()->back()->with('status', 'Item added successfully!');
+        return redirect()->back()->with('status', 'Item requested succesfully, please wait for further information!');
     }
 }

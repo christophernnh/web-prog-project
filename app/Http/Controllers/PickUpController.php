@@ -47,25 +47,29 @@ class PickUpController extends Controller
         return view('dashboard', compact('users'));
     }
 
-
-
-
     public function confirmPickup(Request $request)
     {
         $foodIds = explode(',', $request->input('food_ids', ''));
-
+        $courierNames = $request->input('courier_names', []);
+        $donationLocations = $request->input('donation_locations', []);
 
         if (empty($foodIds) || count($foodIds) === 0 || $foodIds[0] === '') {
             return redirect()->back()->with('error', 'Please select at least one food item.');
         }
 
-        FoodItem::whereIn('id', $foodIds)
-            ->where('status_type_id', 2) // received
-            ->update(['status_type_id' => 3]); // donated
+        foreach ($foodIds as $foodId) {
+            FoodItem::where('id', $foodId)
+                ->where('status_type_id', 1) // registered
+                ->update([
+                    'status_type_id' => 3, // donated
+                    'courier_name' => $courierNames[$foodId] ?? null,
+                    'donation_location' => $donationLocations[$foodId] ?? null,
+                    'donated_at' => now()
+                ]);
+        }
 
-        return redirect()->back()->with('status', 'Food items confirmed as picked up!');
+        return redirect()->back()->with('status', 'Food items confirmed as donated!');
     }
-
 
 
 }

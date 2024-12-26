@@ -21,7 +21,6 @@
                         $colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
                     @endphp
 
-                <div class="container mx-auto px-4">
                     <h1 class="text-2xl font-bold mb-4">Your Donated Food Percentage List</h1>
 
                     <div class="rounded-lg mb-4">
@@ -43,10 +42,8 @@
                                 @endforeach
                             </div>
                         @endif
-                    </div>
 
 
-                    <div class="container mx-auto">
                         <h1 class="text-2xl font-bold mb-4">Your Donated Food Percentage Chart</h1>
 
                         <div class="py-5 bg-white rounded-lg shadow mb-4">
@@ -72,7 +69,6 @@
                                     </div>
                                 </div>
                             @endif
-                        </div>
 
 
                         <h2 class="text-2xl font-bold mb-4">Donated Food List Details</h2>
@@ -88,6 +84,9 @@
                                         <p><strong>Status:</strong> {{ $fooditem->statusType->name }}</p>
                                         <p><strong>Registered By:</strong> {{ $fooditem->user->username }}</p>
                                         <p><strong>Registered at:</strong> {{ $fooditem->created_at->format('Y-m-d H:i:s') }}</p>
+                                        <p><strong>Donated By:</strong> {{ $fooditem->donation_location }}</p>
+                                        <p><strong>Donated At:</strong> {{ $fooditem->donated_at }}</p>
+                                        <p><strong>Courier Name:</strong> {{ $fooditem->courier_name }}</p>
 
                                         @if($fooditem->status_type_id == 1)
                                             <div>
@@ -115,7 +114,7 @@
                         Register User
                     </a>
                     <a href="{{ route('admin.pickups') }}" id="openPickupModal" class="font-medium text-[18px] h-12 w-fit px-4 flex items-center cursor-pointer rounded-md bg-cyan hover:bg-cyanHover transition-colors ease-in duration-[500] shadow-md text-white">
-                        View PickUp Notifications
+                        View Pick Up Notifications
                     </a>
                 </div>
 
@@ -203,7 +202,7 @@
                     <div class="pb-8 min-h-[270px] w-full md:w-1/2 flex flex-col bg-white shadow-md rounded-2xl px-6">
 
                         @isset($clickeduser)
-                                <div class="w-full h-[65px] border-b-[1px] border-black  py-[12px] flex flex-row justify-between items-center">
+                                <div class="w-full h-[65px] border-b-[1px] border-black  py-[12px] flex flex-row justify-between items-center mb-2">
                                     <div class="text-[20px] font-bold">Donated Food List for: {{ $clickeduser->username }}</div>
                                 </div>
                                 @if ($fooditems->isEmpty())
@@ -248,51 +247,75 @@
     const notifList = document.getElementById('notifList');
     const confirmForm = document.querySelector('form[action="{{ route('admin.confirm.pickup') }}"]');
     const selectedFoodIdsInput = document.getElementById('selectedFoodIds');
-
+    
+    //view pickup requests
     openModalBtn.addEventListener('click', (e) => {
-    console.log('Open modal button clicked');
-    e.preventDefault();
+        console.log('Open modal button clicked');
+        e.preventDefault();
 
-    // Show the modal
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+        // Show the modal
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
 
-    // Fetch pick-up data via AJAX
-    fetch('{{ route('admin.pickups') }}', {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(foods => {
-        // Populate the notification list
-        notifList.innerHTML = foods.length > 0
-            ? foods.map(food => `
-                <div class="flex justify-between items-center border-b py-2">
-                    <div>
-                        <span class="block font-semibold">${food.name}</span>
-                        <span class="block text-sm text-gray-500">
-                            Registered by: ${food.user ? food.user.username : 'Unknown'}
-                        </span>
+        // Fetch pick-up data via AJAX
+        fetch('{{ route('admin.pickups') }}', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(foods => {
+            // Populate the notification list
+            notifList.innerHTML = foods.length > 0
+                ? foods.map(food => `
+                    <div class="mb-4 border rounded-lg p-4">
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex-grow">
+                                <span class="block font-semibold text-lg">${food.name}</span>
+                                <span class="block text-sm text-gray-500">
+                                    Registered by: ${food.user ? food.user.username : 'Unknown'}
+                                </span>
+                                <span class="block text-sm text-gray-500">
+                                    Amount: ${food.amount}
+                                </span>
+                                <span class="block text-sm text-gray-500">
+                                    Description: ${food.description}
+                                </span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="checkbox" value="${food.id}" class="food-checkbox w-5 h-5">
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-3 border-t pt-3">
+                            <div>
+                                <label for="courier_${food.id}" class="block text-sm font-medium text-gray-700 mb-1">Courier Name</label>
+                                <input 
+                                    type="text" 
+                                    id="courier_${food.id}" 
+                                    class="w-full bg-whiteDarker h-10 rounded-xl shadow-sm px-4 courier-input"
+                                    placeholder="Enter courier name"
+                                >
+                            </div>
+                            
+                            <div>
+                                <label for="location_${food.id}" class="block text-sm font-medium text-gray-700 mb-1">Donation Location</label>
+                                <input 
+                                    type="text" 
+                                    id="location_${food.id}" 
+                                    class="w-full bg-whiteDarker h-10 rounded-xl shadow-sm px-4 location-input"
+                                    placeholder="Enter donation location"
+                                >
+                            </div>
+                        </div>
                     </div>
-                    <input type="checkbox" value="${food.id}" class="food-checkbox">
-                </div>
-              `).join('')
-            : '<p class="text-gray-500">No pick-up notifications available.</p>';
-    })
-    .catch(error => {
-        console.error('Error fetching pick-up notifications:', error);
-
-        // Display an error message in the modal
-        notifList.innerHTML = `
-            <p class="text-red-500">
-                Failed to load notifications. Please try again later.
-            </p>`;
+                `).join('')
+                : '<p class="text-gray-500">No pick-up notifications available.</p>';
+        })
     });
-});
 
 
 
@@ -303,15 +326,58 @@
     });
 
     confirmForm.addEventListener('submit', (e) => {
-        const selectedIds = Array.from(document.querySelectorAll('.food-checkbox:checked'))
-            .map(checkbox => checkbox.value);
-
-        if (selectedIds.length === 0) {
-            e.preventDefault();
+        e.preventDefault();
+        
+        const selectedCheckboxes = document.querySelectorAll('.food-checkbox:checked');
+        
+        if (selectedCheckboxes.length === 0) {
             alert('Please select at least one item to confirm.');
-        } else {
-            selectedFoodIdsInput.value = selectedIds.join(',');
+            return;
         }
+
+        let allValid = true;
+        const selectedData = Array.from(selectedCheckboxes).map(checkbox => {
+            const itemId = checkbox.value;
+            const courierInput = document.getElementById(`courier_${itemId}`);
+            const locationInput = document.getElementById(`location_${itemId}`);
+            
+            if (!courierInput.value.trim() || !locationInput.value.trim()) {
+                allValid = false;
+                return null;
+            }
+
+            return {
+                id: itemId,
+                courier_name: courierInput.value.trim(),
+                donation_location: locationInput.value.trim()
+            };
+        });
+
+        if (!allValid) {
+            alert('Please fill in courier name and donation location for all selected items.');
+            return;
+        }
+
+        // Prepare data for submission
+        selectedFoodIdsInput.value = selectedData.map(item => item.id).join(',');
+        
+        // Add hidden inputs for courier names and locations
+        selectedData.forEach(item => {
+            const courierInput = document.createElement('input');
+            courierInput.type = 'hidden';
+            courierInput.name = `courier_names[${item.id}]`;
+            courierInput.value = item.courier_name;
+            confirmForm.appendChild(courierInput);
+
+            const locationInput = document.createElement('input');
+            locationInput.type = 'hidden';
+            locationInput.name = `donation_locations[${item.id}]`;
+            locationInput.value = item.donation_location;
+            confirmForm.appendChild(locationInput);
+        });
+
+        // Submit the form
+        confirmForm.submit();
     });
 });
     </script>
